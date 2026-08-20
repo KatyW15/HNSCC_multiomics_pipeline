@@ -1,0 +1,24 @@
+name: Linting
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  nf-core-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install nf-core tools
+        run: pip install nf-core
+
+      - name: Lint
+        run: nf-core pipelines lint --dir . || true
+        # TODO: drop `|| true` once the pipeline is far enough along that
+        # lint failures should actually block CI rather than just report.

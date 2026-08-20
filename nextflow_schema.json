@@ -1,0 +1,62 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "$id": "https://raw.githubusercontent.com/KatyW15/HNSCC_multiomics_pipeline/master/nextflow_schema.json",
+  "title": "HNSCC_multiomics_pipeline parameters",
+  "description": "Multi-omics circRNA/HPV profiling pipeline for paired tumor/normal HNSCC samples",
+  "type": "object",
+  "definitions": {
+    "input_output_options": {
+      "title": "Input/output options",
+      "type": "object",
+      "required": ["samplesheet", "outdir"],
+      "properties": {
+        "samplesheet": {
+          "type": "string",
+          "format": "file-path",
+          "description": "Path to master sample sheet (see assets/samplesheet_template.csv for format)."
+        },
+        "rnaseq_results": {
+          "type": "string",
+          "format": "directory-path",
+          "description": "Output directory of the Stage 1a nf-core/rnaseq (v3.26.0) run."
+        },
+        "sarek_results": {
+          "type": "string",
+          "format": "directory-path",
+          "description": "Output directory of the Stage 1b nf-core/sarek (v3.9.0) run."
+        },
+        "outdir": {
+          "type": "string",
+          "format": "directory-path",
+          "default": "./results",
+          "description": "Directory to write pipeline results to."
+        }
+      }
+    },
+    "reference_options": {
+      "title": "Reference genome options",
+      "type": "object",
+      "properties": {
+        "fasta": {
+          "type": "string",
+          "format": "file-path",
+          "description": "hg38 primary assembly genome FASTA (GENCODE-distributed)."
+        },
+        "gtf": {
+          "type": "string",
+          "format": "file-path",
+          "description": "GENCODE Release 50 annotation GTF."
+        },
+        "hpv_panel_fasta": {
+          "type": "string",
+          "format": "file-path",
+          "description": "High-risk HPV genotype reference panel FASTA (see download_references.sh)."
+        }
+      }
+    }
+  },
+  "allOf": [
+    { "$ref": "#/definitions/input_output_options" },
+    { "$ref": "#/definitions/reference_options" }
+  ]
+}

@@ -1,0 +1,24 @@
+# Nextflow
+work/
+.nextflow/
+.nextflow.log*
+results/
+timeline*.html
+report*.html
+trace*.txt
+dag*.html/svg/png
+
+# Reference data (large; staged externally on HPC, not committed)
+assets/hg38/
+assets/gencode/
+
+# Singularity
+*.sif
+.singularity/
+
+# OS
+.DS_Store
+
+# Editors
+.vscode/
+*.swp

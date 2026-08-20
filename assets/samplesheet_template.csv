@@ -1,0 +1,19 @@
+patient_id,batch_id,tissue,hpv_status,hpv_genotype,modality,sample_id,fastq_1,fastq_2,survival_time_days,vital_status,notes
+HNSCC-001,batch1,tumor,positive,HPV16,rnaseq,HNSCC-001_tumor_rnaseq,/data/raw/rnaseq/HNSCC-001_tumor_R1.fastq.gz,/data/raw/rnaseq/HNSCC-001_tumor_R2.fastq.gz,NA,NA,
+HNSCC-001,batch1,normal,positive,HPV16,rnaseq,HNSCC-001_normal_rnaseq,/data/raw/rnaseq/HNSCC-001_normal_R1.fastq.gz,/data/raw/rnaseq/HNSCC-001_normal_R2.fastq.gz,NA,NA,
+HNSCC-001,batch1,tumor,positive,HPV16,circrnaseq,HNSCC-001_tumor_circrnaseq,/data/raw/circrnaseq/HNSCC-001_tumor_R1.fastq.gz,/data/raw/circrnaseq/HNSCC-001_tumor_R2.fastq.gz,NA,NA,
+HNSCC-001,batch1,normal,positive,HPV16,circrnaseq,HNSCC-001_normal_circrnaseq,/data/raw/circrnaseq/HNSCC-001_normal_R1.fastq.gz,/data/raw/circrnaseq/HNSCC-001_normal_R2.fastq.gz,NA,NA,
+HNSCC-001,batch1,tumor,positive,HPV16,smrnaseq,HNSCC-001_tumor_smrnaseq,/data/raw/smrnaseq/HNSCC-001_tumor_R1.fastq.gz,,NA,NA,
+HNSCC-001,batch1,normal,positive,HPV16,smrnaseq,HNSCC-001_normal_smrnaseq,/data/raw/smrnaseq/HNSCC-001_normal_R1.fastq.gz,,NA,NA,
+HNSCC-001,batch1,tumor,positive,HPV16,wgs,HNSCC-001_tumor_wgs,/data/raw/wgs/HNSCC-001_tumor_R1.fastq.gz,/data/raw/wgs/HNSCC-001_tumor_R2.fastq.gz,NA,NA,
+HNSCC-001,batch1,normal,positive,HPV16,wgs,HNSCC-001_normal_wgs,/data/raw/wgs/HNSCC-001_normal_R1.fastq.gz,/data/raw/wgs/HNSCC-001_normal_R2.fastq.gz,NA,NA,
+HNSCC-002,batch1,tumor,negative,NA,rnaseq,HNSCC-002_tumor_rnaseq,/data/raw/rnaseq/HNSCC-002_tumor_R1.fastq.gz,/data/raw/rnaseq/HNSCC-002_tumor_R2.fastq.gz,NA,NA,
+HNSCC-002,batch1,normal,negative,NA,rnaseq,HNSCC-002_normal_rnaseq,/data/raw/rnaseq/HNSCC-002_normal_R1.fastq.gz,/data/raw/rnaseq/HNSCC-002_normal_R2.fastq.gz,NA,NA,
+HNSCC-002,batch1,tumor,negative,NA,circrnaseq,HNSCC-002_tumor_circrnaseq,/data/raw/circrnaseq/HNSCC-002_tumor_R1.fastq.gz,/data/raw/circrnaseq/HNSCC-002_tumor_R2.fastq.gz,NA,NA,
+HNSCC-002,batch1,normal,negative,NA,circrnaseq,HNSCC-002_normal_circrnaseq,/data/raw/circrnaseq/HNSCC-002_normal_R1.fastq.gz,/data/raw/circrnaseq/HNSCC-002_normal_R2.fastq.gz,NA,NA,
+HNSCC-002,batch1,tumor,negative,NA,wgs,HNSCC-002_tumor_wgs,/data/raw/wgs/HNSCC-002_tumor_R1.fastq.gz,/data/raw/wgs/HNSCC-002_tumor_R2.fastq.gz,NA,NA,
+HNSCC-002,batch1,normal,negative,NA,wgs,HNSCC-002_normal_wgs,/data/raw/wgs/HNSCC-002_normal_R1.fastq.gz,/data/raw/wgs/HNSCC-002_normal_R2.fastq.gz,NA,NA,
+HNSCC-002,batch1,tumor,negative,NA,smrnaseq,,,,,,missing: no smRNA-seq library generated for this patient
+HNSCC-003,batch1,tumor,unknown,NA,rnaseq,HNSCC-003_tumor_rnaseq,/data/raw/rnaseq/HNSCC-003_tumor_R1.fastq.gz,/data/raw/rnaseq/HNSCC-003_tumor_R2.fastq.gz,NA,NA,HPV testing pending
+HNSCC-003,batch1,tumor,unknown,NA,circrnaseq,HNSCC-003_tumor_circrnaseq,/data/raw/circrnaseq/HNSCC-003_tumor_R1.fastq.gz,/data/raw/circrnaseq/HNSCC-003_tumor_R2.fastq.gz,NA,NA,HPV testing pending
+HNSCC-003,batch1,tumor,unknown,NA,wgs,HNSCC-003_tumor_wgs,/data/raw/wgs/HNSCC-003_tumor_R1.fastq.gz,/data/raw/wgs/HNSCC-003_tumor_R2.fastq.gz,NA,NA,no matched normal collected
