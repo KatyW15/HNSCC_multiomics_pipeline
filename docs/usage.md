@@ -55,8 +55,29 @@ nextflow run . \
   --fasta <hg38 fasta> \
   --gtf <GENCODE v50 gtf> \
   --hpv_panel_fasta <hpv panel fasta> \
+  --circrna_annotation <pinned circAtlas hg38 release> \
   --outdir <results dir>
 ```
+
+### circRNA arm (CIRCRNASEQ)
+
+Requires `--fasta`, `--gtf`, and `--circrna_annotation` (pinned circAtlas hg38
+release). Per-aligner indices are built on first run unless supplied via
+`--star_index` / `--bwa_index` / `--bowtie2_index` / `--ciriquant_index`
+(recommended on the HPC — build once, reuse across batches).
+
+Key knobs (defaults in `nextflow.config`, full list in `nextflow_schema.json`):
+- `--circrna_tools circexplorer2,ciriquant,find_circ` — detection ensemble;
+  drop entries to disable a caller. Without `ciriquant` the count matrix and
+  DESeq2 steps are skipped (it is the uniform quantifier).
+- `--circrna_bsj_min_reads 2`, `--circrna_min_tools 2`,
+  `--circrna_bsj_merge_slop 5` — consensus/filtering rules.
+- `--star_chimeric_args '...'` — must match the Stage 1a nf-core/rnaseq
+  `--extra_star_align_args` for the cross-library co-validation to be
+  meaningful (see `pipeline_architecture.md` open items #10, #23).
+
+See `pipeline_architecture.md` §3 `CIRCRNASEQ` for the full design and open
+items #1, #20–24.
 
 ## Adding a new batch
 
@@ -65,8 +86,15 @@ a separate sheet. Re-run all three stages against the cumulative sheet —
 Nextflow's `-resume` caching means only new samples and joint/integration
 steps actually recompute. See `pipeline_architecture.md` for the rationale.
 
-## Not yet implemented
+## Implementation status
 
-Subworkflow logic (§3 of `pipeline_architecture.md`) is stubbed but not
-built — see that document's implementation order before expecting a full run
-to produce results.
+- `INPUT_CHECK` — built.
+- `CIRCRNASEQ` — subworkflow + module structure built; the bespoke steps
+  (`bin/circrna_*.R|py`, `bin/rnaser_efficiency.py`) are scaffolds that exit
+  with "not implemented". Runs end to end only under `-stub-run`. Container
+  tags and the find_circ mulled image still need pinning
+  (`pipeline_architecture.md` §5, open item #22).
+- All other subworkflows (§3 of `pipeline_architecture.md`) — stubbed.
+
+See that document's implementation order before expecting a full run to
+produce results.

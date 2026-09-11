@@ -1,0 +1,111 @@
+---
+title: "HNSCC circRNA Multi-Omics — Cohort Report"
+subtitle: "Batch run `r Sys.Date()`"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    code-fold: true
+    embed-resources: true
+params:
+  mae: "results/integration/assembled/mae.rds"
+  recurrence_dir: "results/integration/recurrence_scores"
+  cerna_dir: "results/integration/cerna_network"
+  genomic_dir: "results/integration/genomic_correlation"
+  hpv_axis_dir: "results/integration/hpv_axis"
+  structure_dir: "results/integration/structure"
+  biomarker_dir: "results/integration/biomarker"
+  candidate_registry: "results/integration/candidate_registry.tsv"
+  multiqc: "results/multiqc/multiqc_report.html"
+---
+
+<!--
+  REPORTING — one section per master-list question. See
+  pipeline_architecture.md section 3 and
+  HNSCC_pipeline_build/analysis_questions_master_list.md.
+
+  Every code chunk below is a TODO scaffold. All statistics here are
+  EXPLORATORY / hypothesis-generating at n~=30 tumours; confirmatory Q1/Q2
+  significance comes from the upstream per-modality DESeq2 models.
+-->
+
+```{r setup, include=FALSE}
+# TODO: load params$mae, attach helper functions, set knitr options.
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
+```
+
+# Candidate registry (read this first)
+
+```{r candidate-registry}
+# TODO: render params$candidate_registry as a sortable table, priority-ordered.
+```
+
+# Cohort overview
+
+```{r cohort-overview}
+# TODO: patient x modality completeness (from assembled_completeness.tsv),
+# HPV+/- split, coverage-QC pass/fail, n per contrast.
+```
+
+# Q1 — circRNAs DE in tumour vs paired normal
+
+```{r q1}
+# Q1a effect-size ranking | Q1b tumour/normal-exclusive (+ expression gate,
+# lower-confidence tier) | Q1c total circRNA burden | Q1d co-validation in
+# circRNA-seq AND total RNA-seq | Q1e novel vs circBase/circAtlas enrichment.
+# Each DE row annotated with recurrence_frac / commonality_tier.
+```
+
+# Q2 — circRNAs DE in HPV-positive vs HPV-negative tumours
+
+```{r q2}
+# Q2a as Q1a-e for the HPV contrast | Q2b HPV-genome-derived circRNAs and their
+# specificity (from hpv_axis_dir).
+```
+
+# Q3 — unsupervised tumour sub-groups
+
+```{r q3}
+# Q3a per-modality partitions + iClusterBayes joint solution + ARI matrix
+# (which modality drives structure) | Q3b partition-vs-HPV-status ARI
+# (is HPV the dominant split, or are there candidate novel subtypes).
+# From structure_dir. Show subsampling stability.
+```
+
+# Mechanistic — linear vs circular expression
+
+```{r mech-ratio}
+# circRNA/linear-mRNA ratio shift for host genes of DE circRNAs.
+```
+
+# Mechanistic — ceRNA / circRNA–miRNA sponge support
+
+```{r mech-cerna}
+# From cerna_dir: anticorrelated + MRE-predicted circRNA-miRNA edges;
+# circRNA-miRNA-mRNA triads. Network figure + edge table.
+```
+
+# Mechanistic — genomic drivers of circRNA biogenesis
+
+```{r mech-genomic}
+# From genomic_dir: locus overlap with CNV/SV + amplicon enrichment;
+# dosage (circRNA vs local CN); burden vs TMB / driver mutations;
+# HPV-integration proximity.
+```
+
+# Translational — candidate biomarker panel
+
+```{r biomarker}
+# From biomarker_dir: nested-CV AUC + CI, selected-feature frequency, consensus
+# panel. Flagged hypothesis-generating at n~=30.
+```
+
+# Per-sample QC
+
+See the linked [MultiQC report](`r params$multiqc`).
+
+# Session info
+
+```{r session-info}
+sessionInfo()
+```

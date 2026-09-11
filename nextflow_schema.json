@@ -53,10 +53,94 @@
           "description": "High-risk HPV genotype reference panel FASTA (see download_references.sh)."
         }
       }
+    },
+    "circrna_options": {
+      "title": "circRNA arm (CIRCRNASEQ) options",
+      "type": "object",
+      "description": "See pipeline_architecture.md §3 `CIRCRNASEQ` and open items #1, #20-24.",
+      "properties": {
+        "circrna_annotation": {
+          "type": "string",
+          "format": "file-path",
+          "description": "Pinned circAtlas hg38 release (known/novel reference). Required whenever the circRNA arm runs (open item #16)."
+        },
+        "circrna_tools": {
+          "type": "string",
+          "default": "circexplorer2,ciriquant,find_circ",
+          "pattern": "^((circexplorer2|ciriquant|find_circ)(,(circexplorer2|ciriquant|find_circ))*)$",
+          "description": "Comma-separated detection ensemble. Drop entries to disable a caller (CI / ablation). Without 'ciriquant' the count matrix and DESeq2 steps are skipped."
+        },
+        "star_index": {
+          "type": "string",
+          "format": "directory-path",
+          "description": "Prebuilt STAR index; built from fasta/gtf if unset."
+        },
+        "bwa_index": {
+          "type": "string",
+          "format": "directory-path",
+          "description": "Prebuilt BWA index; built from fasta if unset."
+        },
+        "bowtie2_index": {
+          "type": "string",
+          "format": "directory-path",
+          "description": "Prebuilt Bowtie2 index; built from fasta if unset."
+        },
+        "ciriquant_index": {
+          "type": "string",
+          "format": "directory-path",
+          "description": "Prebuilt CIRIquant reference bundle (config.yaml + hisat2/bwa indices); built if unset."
+        },
+        "star_sjdb_overhang": {
+          "type": "integer",
+          "default": 149,
+          "description": "STAR --sjdbOverhang (read length - 1)."
+        },
+        "star_chimeric_args": {
+          "type": "string",
+          "default": "--chimSegmentMin 12 --chimJunctionOverhangMin 12 --chimScoreMin 1 --chimScoreDropMax 20 --chimScoreSeparation 10 --chimOutType Junctions",
+          "description": "STAR chimeric-detection flags for the shared alignment. Keep in sync with the Stage 1a nf-core/rnaseq --extra_star_align_args (open items #10, #23)."
+        },
+        "trimgalore_args": {
+          "type": "string",
+          "default": "",
+          "description": "Extra flags passed to Trim Galore."
+        },
+        "circrna_bsj_min_reads": {
+          "type": "integer",
+          "default": 2,
+          "description": "Minimum back-splice-junction read support per tool before the consensus merge (decision 6)."
+        },
+        "circrna_min_tools": {
+          "type": "integer",
+          "default": 2,
+          "description": "Minimum number of tools that must call a BSJ for it to enter the quantified DE matrix. The annotated registry keeps all >=1-tool calls (decision 7)."
+        },
+        "circrna_bsj_merge_slop": {
+          "type": "integer",
+          "default": 5,
+          "description": "Coordinate margin (bp) for matching BSJs across tools; canonical junctions still match exactly (decision 8)."
+        },
+        "circrna_deseq2_sizefactors": {
+          "type": "string",
+          "default": "poscounts",
+          "description": "DESeq2 size-factor method for the sparse circRNA matrix. Placeholder pending batch-1 data (open item #20): 'poscounts' | 'ratio' | 'import:<file>'."
+        },
+        "circrna_min_expr_reads": {
+          "type": "integer",
+          "default": 2,
+          "description": "Low-count prefilter: reads required to count a circRNA as detected in a sample (decision 19)."
+        },
+        "circrna_min_expr_samples_frac": {
+          "type": "number",
+          "default": 0.25,
+          "description": "Low-count prefilter: fraction of samples in at least one tissue group in which a circRNA must be detected to be tested (decision 19)."
+        }
+      }
     }
   },
   "allOf": [
     { "$ref": "#/definitions/input_output_options" },
-    { "$ref": "#/definitions/reference_options" }
+    { "$ref": "#/definitions/reference_options" },
+    { "$ref": "#/definitions/circrna_options" }
   ]
 }

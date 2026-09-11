@@ -1,6 +1,8 @@
-// RNASEQ_ADAPTER — wraps Stage 1a (nf-core/rnaseq v3.26.0). See
-// pipeline_architecture.md §3. Does NOT run its own alignment — ingests the
-// external Stage 1a output directory.
+// RNASEQ_ADAPTER — total RNA-seq arm, part (b): the Stage 2 adapter. Part (a)
+// (the pinned nf-core/rnaseq v3.26.0 invocation) runs externally and is not
+// vendored here — see HNSCC_pipeline_build for its launch script/samplesheets.
+// This subworkflow does NOT run its own alignment — it ingests the external
+// Stage 1a output directory. See pipeline_architecture.md §3.
 //
 // TODO:
 // - auto-generate the Stage 1a samplesheet from the master samplesheet
