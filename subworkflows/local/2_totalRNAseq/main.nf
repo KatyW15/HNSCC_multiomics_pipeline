@@ -1,11 +1,10 @@
 // RNASEQ_ADAPTER — total RNA-seq arm, part (b): the Stage 2 adapter. Part (a)
 // (the pinned nf-core/rnaseq v3.26.0 invocation) runs externally and is not
-// vendored here — see HNSCC_pipeline_build for its launch script/samplesheets.
+// vendored here — see stage1/ for its launch script and samplesheet generation.
 // This subworkflow does NOT run its own alignment — it ingests the external
 // Stage 1a output directory. See pipeline_architecture.md §3.
 //
 // TODO:
-// - auto-generate the Stage 1a samplesheet from the master samplesheet
 // - after Stage 1a completes, ingest salmon gene counts -> host-gene DESeq2
 // - ingest STAR chimeric junctions (via --extra_star_align_args on Stage 1a)
 //   -> hand off to CIRCRNASEQ for cross-library BSJ co-validation

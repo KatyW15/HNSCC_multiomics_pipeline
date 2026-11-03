@@ -8,6 +8,9 @@ report*.html
 trace*.txt
 dag*.html/svg/png
 
+# Stage 1 samplesheets generated from the master sheet
+stage1/samplesheets/
+
 # Reference data (large; staged externally on HPC, not committed)
 assets/hg38/
 assets/gencode/

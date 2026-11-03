@@ -17,5 +17,12 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
   efficiency QC. Bespoke `bin/circrna_*.R|py` steps are scaffolds
   (`-stub-run` only). Container tags and the find_circ mulled image are not yet
   pinned. See `pipeline_architecture.md` §3 + open items #1, #20–24.
+- `stage1/`: launch scaffolding for the three Stage 1 nf-core pipelines (sarek,
+  rnaseq, smrnaseq). `bin/make_stage1_samplesheets.py` splits the master sample
+  sheet into the three nf-core sample sheets; `run_pipeline.sh` runs one pipeline
+  with shared Alpine settings (`conf/alpine.config`, `env/alpine_env.sh`) plus
+  per-pipeline overrides (`conf/*.config`) and parameters (`params/*.yaml`).
+  Values still to fill in are marked TODO; the all-in-one launcher is not
+  written yet.
 
 Nothing tagged yet — no released version exists.

@@ -1,0 +1,20 @@
+# nf-core/rnaseq 3.26.0 (Stage 1a, ribo-depleted total RNA-seq). Passed with -params-file.
+# input / outdir are set per run by run_rnaseq.sh, not here.
+
+# Reference: hg38 + GENCODE v50 from download_references.sh.
+fasta: TODO   # .../hg38/GRCh38.primary_assembly.genome.fa
+gtf: TODO     # .../gencode/gencode.v50.annotation.gtf
+gencode: true
+
+aligner: star_salmon
+
+# First run builds the indexes; keep them, then point the next two lines at the
+# saved copies (<outdir>/genome/index/...) so later batches skip the build.
+save_reference: true
+# star_index: TODO
+# salmon_index: TODO
+
+# STAR chimeric output for circRNA co-validation. Must match star_chimeric_args in
+# HNSCC_multiomics_pipeline/nextflow.config (open item #23).
+extra_star_align_args: "--chimSegmentMin 12 --chimJunctionOverhangMin 12 --chimScoreMin 1 --chimScoreDropMax 20 --chimScoreSeparation 10 --chimOutType Junctions"
+# TODO: after the test, check Chimeric.out.junction is published (open item #10)

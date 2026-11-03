@@ -1,0 +1,17 @@
+# nf-core/smrnaseq (Stage 1c). Version pin is open item #19 -- set it in run_smrnaseq.sh.
+# input / outdir are set per run by run_smrnaseq.sh, not here.
+# TODO: check every key below against the pinned version's parameter docs.
+
+# Library prep kit decides adapter trimming: illumina | nextflex | qiaseq | cats | custom
+protocol: TODO
+# three_prime_adapter: TODO   # only if protocol: custom
+
+mirtrace_species: hsa
+
+# Genome for miRDeep2 / genome mapping.
+fasta: TODO   # .../hg38/GRCh38.primary_assembly.genome.fa
+# bowtie_index: TODO          # set after the first run to skip the index build
+
+# Pin the miRBase release so miRNA names stay fixed across batches (open item #12).
+# mature: TODO
+# hairpin: TODO

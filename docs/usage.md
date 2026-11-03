@@ -2,9 +2,14 @@
 
 ## Overview
 
-This pipeline is run in three stages per batch. Stages 1a/1b are unmodified,
+This pipeline is run in two stages per batch. Stages 1a/1b/1c are unmodified,
 pinned, independent nf-core pipeline invocations — not vendored into this
 repo — and this pipeline (Stage 2) consumes their output directories.
+
+The Stage 1 launch scripts live in `stage1/`: `stage1/bin/make_stage1_samplesheets.py`
+splits the master sample sheet into the three nf-core sample sheets, and
+`stage1/run_pipeline.sh` runs one pipeline with the settings in `stage1/conf/` and
+`stage1/params/`. See `stage1/README.md`.
 
 ## 1. Sample sheet
 
@@ -20,31 +25,36 @@ Missing modalities are expected, not an error — leave `sample_id`/`fastq_1`/`f
 blank for a patient/tissue/modality combination that wasn't generated, and note why
 in the `notes` column.
 
-## 2. Stage 1a — nf-core/rnaseq
+## 2. Stage 1 — nf-core/rnaseq, sarek, smrnaseq
 
 ```bash
-nextflow run nf-core/rnaseq -r 3.26.0 \
-  -profile singularity \
-  --input <rnaseq-only samplesheet derived from the master sheet> \
-  --aligner star_salmon \
-  --extra_star_align_args '--chimOutType Junctions --chimSegmentMin 12 --chimJunctionOverhangMin 12' \
-  --outdir <stage1a_outdir>
+# Split the master sheet (wgs -> sarek, rnaseq -> rnaseq, smrnaseq -> smrnaseq;
+# circrnaseq rows stay for Stage 2). --patients/--batch subset it for tests.
+# --sex-lookup is only needed while the master sheet has no sex column.
+python3 stage1/bin/make_stage1_samplesheets.py \
+  --master <master samplesheet> \
+  --sex-lookup <csv with patient,sex columns> \
+  --outdir stage1/samplesheets/<run_label>
+
+# Run each pipeline (one at a time for tests)
+stage1/run_pipeline.sh rnaseq   stage1/samplesheets/<run_label>/rnaseq_samplesheet.csv   <run_label>
+stage1/run_pipeline.sh sarek    stage1/samplesheets/<run_label>/sarek_samplesheet.csv    <run_label>
+stage1/run_pipeline.sh smrnaseq stage1/samplesheets/<run_label>/smrnaseq_samplesheet.csv <run_label>
 ```
 
-Strandedness: `auto`.
+Pipeline settings (versions, `--tools`, references, STAR chimeric flags) are in
+`stage1/params/*.yaml`; Slurm/resource settings in `stage1/conf/*.config`.
 
-## 3. Stage 1b — nf-core/sarek
+- **Stage 1a** — nf-core/rnaseq 3.26.0, `--aligner star_salmon`, strandedness `auto`,
+  STAR chimeric output via `--extra_star_align_args`.
+- **Stage 1b** — nf-core/sarek 3.9.0, `--tools mutect2,strelka,ascat,cnvkit,controlfreec,manta,vep`,
+  `--genome GATK.GRCh38`. ASCAT/Control-FREEC need the `sex` column.
+- **Stage 1c** — nf-core/smrnaseq, version pin TBD (open item #19). Single-end: R1 only.
 
-```bash
-nextflow run nf-core/sarek -r 3.9.0 \
-  -profile singularity \
-  --input <wgs-only samplesheet derived from the master sheet> \
-  --tools mutect2,ascat,cnvkit,controlfreec,manta,vep \
-  --genome GATK.GRCh38 \
-  --outdir <stage1b_outdir>
-```
+A single command that splits the sheet and launches all three is planned but not
+written yet.
 
-## 4. Stage 2 — this pipeline
+## 3. Stage 2 — this pipeline
 
 ```bash
 nextflow run . \

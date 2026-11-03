@@ -1,0 +1,9 @@
+# nf-core/sarek 3.9.0 (Stage 1b, WGS). Passed with -params-file.
+# input / outdir are set per run by run_sarek.sh, not here.
+
+genome: GATK.GRCh38
+tools: mutect2,strelka,ascat,cnvkit,controlfreec,manta,vep
+trim_fastq: true
+save_trimmed: false     # batch plan: don't keep trimmed fastqs
+save_mapped: false      # TODO: true if HPV integration needs the recal CRAMs kept
+# TODO: anything else from the batch 1 params_*.json you want pinned explicitly

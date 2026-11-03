@@ -16,18 +16,21 @@ logic is not yet implemented. See `docs/usage.md` for the intended run pattern.
 
 ## Pipeline architecture, in brief
 
-Three pipeline invocations per batch:
+Four pipeline invocations per batch:
 
 1. **Stage 1a** — [`nf-core/rnaseq`](https://github.com/nf-core/rnaseq) `v3.26.0`, run against
    the ribo-depleted total RNA-seq samples.
 2. **Stage 1b** — [`nf-core/sarek`](https://github.com/nf-core/sarek) `v3.9.0`, run against
    the WGS samples.
-3. **Stage 2** — this pipeline. Takes both Stage 1 output directories plus the master
-   sample sheet, and handles circRNA-seq, smRNA-seq, HPV detection, and all cross-omics
+3. **Stage 1c** — [`nf-core/smrnaseq`](https://github.com/nf-core/smrnaseq) (version pin TBD),
+   run against the smRNA-seq samples.
+4. **Stage 2** — this pipeline. Takes the Stage 1 output directories plus the master
+   sample sheet, and handles circRNA-seq, HPV detection, and all cross-omics
    integration/reporting.
 
-Neither Stage 1 pipeline is vendored here — they're run as their own pinned, independent
-invocations. This pipeline consumes their output directories as input parameters.
+None of the Stage 1 pipelines is vendored here — they're run as their own pinned, independent
+invocations. `stage1/` holds the scripts that split the master sample sheet and launch them
+(see `stage1/README.md`). This pipeline consumes their output directories as input parameters.
 
 ## Requirements
 
