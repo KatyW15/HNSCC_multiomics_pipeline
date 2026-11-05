@@ -25,6 +25,11 @@
           "format": "directory-path",
           "description": "Output directory of the Stage 1b nf-core/sarek (v3.9.0) run."
         },
+        "smrnaseq_results": {
+          "type": "string",
+          "format": "directory-path",
+          "description": "Output directory of the Stage 1c nf-core/smrnaseq run (version pin TBD, open item #19)."
+        },
         "outdir": {
           "type": "string",
           "format": "directory-path",

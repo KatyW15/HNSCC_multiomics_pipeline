@@ -3,11 +3,11 @@
 // Reads the master sample sheet, validates each row against the controlled
 // vocabulary documented in docs/usage.md, checks fastq path existence for
 // rows that actually carry data, and branches into one channel per modality.
-// A row with a blank sample_id/fastq_1/fastq_2 is a documented missing
-// modality (see docs/usage.md), not an error — it's excluded from its
-// modality channel below but still recorded in the completeness report so
-// the gap is visible before compute starts, per the architecture doc's
-// "missing data is normal, not an error" principle.
+// A row whose fastq_1 is blank or NA is a documented missing modality (see
+// docs/usage.md), not an error — it's excluded from its modality channel
+// below but still recorded in the completeness report so the gap is visible
+// before compute starts, per the architecture doc's "missing data is normal,
+// not an error" principle. Its sample_id may be kept (the master sheet does).
 
 import groovy.transform.Field
 
@@ -15,6 +15,12 @@ import groovy.transform.Field
 @Field def VALID_MODALITY     = ['rnaseq', 'circrnaseq', 'smrnaseq', 'wgs']
 @Field def VALID_HPV_STATUS   = ['positive', 'negative', 'unknown']
 @Field def VALID_HPV_GENOTYPE = ['HPV16', 'HPV18', 'other_highrisk', 'NA']
+
+// Blank and 'NA' both mean "no value" (the master sheet uses NA).
+def has_value(value) {
+    def v = value?.trim()
+    return v && v != 'NA'
+}
 
 def validate_row(row) {
     def where = "patient_id=${row.patient_id}, tissue=${row.tissue}, modality=${row.modality}, sample_id=${row.sample_id ?: '(blank)'}"
@@ -37,17 +43,20 @@ def validate_row(row) {
         error "INPUT_CHECK: invalid hpv_genotype '${row.hpv_genotype}' — must be one of ${VALID_HPV_GENOTYPE} (${where})"
     }
 
-    // A present row must actually carry a sample_id and at least fastq_1;
-    // a blank row must be fully blank, not half-filled-in.
-    def has_sample = row.sample_id?.trim()
-    def has_fastq1 = row.fastq_1?.trim()
-    if (has_sample && !has_fastq1) {
-        error "INPUT_CHECK: sample_id set but fastq_1 is blank (${where})"
+    // A present row (fastq_1 set) must carry a sample_id; a missing row
+    // (fastq_1 blank/NA) must not have a stray fastq_2.
+    def has_fastq1 = has_value(row.fastq_1)
+    def has_fastq2 = has_value(row.fastq_2)
+    if (has_fastq1 && !has_value(row.sample_id)) {
+        error "INPUT_CHECK: fastq_1 set but sample_id is blank (${where})"
+    }
+    if (!has_fastq1 && has_fastq2) {
+        error "INPUT_CHECK: fastq_2 set but fastq_1 is blank (${where})"
     }
     if (has_fastq1 && !file(row.fastq_1).exists()) {
         error "INPUT_CHECK: fastq_1 does not exist: ${row.fastq_1} (${where})"
     }
-    if (row.fastq_2?.trim() && !file(row.fastq_2).exists()) {
+    if (has_fastq2 && !file(row.fastq_2).exists()) {
         error "INPUT_CHECK: fastq_2 does not exist: ${row.fastq_2} (${where})"
     }
 
@@ -63,10 +72,10 @@ def to_meta_tuple(row) {
         modality    : row.modality,
         hpv_status  : row.hpv_status,
         hpv_genotype: row.hpv_genotype ?: 'NA',
-        single_end  : !(row.fastq_2?.trim()),
+        single_end  : !has_value(row.fastq_2),
     ]
     def fastq_1 = file(row.fastq_1)
-    def fastq_2 = row.fastq_2?.trim() ? file(row.fastq_2) : null
+    def fastq_2 = has_value(row.fastq_2) ? file(row.fastq_2) : null
     return tuple(meta, fastq_1, fastq_2)
 }
 
@@ -83,7 +92,7 @@ workflow INPUT_CHECK {
     // Per-patient/tissue/modality completeness — a run artifact so gaps are
     // visible before compute starts rather than discovered mid-run.
     rows
-        .map { row -> [row.patient_id, row.tissue, row.modality, row.sample_id?.trim() ? 'present' : 'missing'].join('\t') }
+        .map { row -> [row.patient_id, row.tissue, row.modality, has_value(row.fastq_1) ? 'present' : 'missing'].join('\t') }
         .collectFile(
             name: 'patient_completeness.tsv',
             storeDir: "${params.outdir}/pipeline_info",
@@ -91,7 +100,7 @@ workflow INPUT_CHECK {
             seed: ['patient_id', 'tissue', 'modality', 'status'].join('\t')
         )
 
-    present = rows.filter { row -> row.sample_id?.trim() }
+    present = rows.filter { row -> has_value(row.fastq_1) }
 
     branched = present
         .map { row -> to_meta_tuple(row) }

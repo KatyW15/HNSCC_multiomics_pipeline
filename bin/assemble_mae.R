@@ -11,7 +11,8 @@
 #           per-modality product directories:
 #             circrnaseq/  consensus BSJ calls + circRNA DE tables
 #             rnaseq/      salmon host-gene counts
-#             smrnaseq/    miRDeep2 miRNA counts (+ DE)
+#             smrnaseq/    Stage 1c nf-core/smrnaseq miRNA counts (+ DE),
+#                          via SMRNASEQ_ADAPTER
 #             wgs/         Mutect2 n Strelka2 somatic consensus, 3-caller CNV
 #                          consensus, Manta SV, mosdepth coverage QC
 #             hpv/         linear E6/E7 quant, HPV-derived circRNA calls,
@@ -27,7 +28,7 @@
 #       * circRNA loci as GRanges on a single contig convention — enforce
 #         chr-prefixed; rename Sarek-derived coordinates to match GENCODE
 #         (architecture open item #11) BEFORE any overlap join
-#       * pin the miRBase release used by SMRNASEQ
+#       * pin the miRBase release used by Stage 1c nf-core/smrnaseq
 #   - colData carries: patient_id, tissue, hpv_status, batch_id,
 #     coverage_qc_pass, TMB, e6e7_load, and per-modality availability flags.
 #   - SV / HPV-integration sites stored as GRangesList in metadata(), not as
@@ -59,7 +60,7 @@ parse_args_or_die <- function() {
 
 read_circrna <- function(dir) stop("not implemented: read consensus BSJ calls + build circRNA_bsj / circRNA_cpm assays + circRNA locus GRanges")
 read_rnaseq <- function(dir) stop("not implemented: read salmon host-gene counts -> gene_counts assay (GENCODE v50 Ensembl IDs)")
-read_smrnaseq <- function(dir) stop("not implemented: read miRDeep2 counts -> miRNA_counts assay (pinned miRBase)")
+read_smrnaseq <- function(dir) stop("not implemented: read nf-core/smrnaseq miRNA counts -> miRNA_counts assay (pinned miRBase)")
 read_wgs <- function(dir) stop("not implemented: gene-level mut_gene (binary) + cnv_gene (numeric) matrices, sv GRangesList, TMB + coverage_qc_pass per sample")
 read_hpv <- function(dir) stop("not implemented: e6e7_load per sample, HPV-circRNA presence, integration-site GRangesList")
 harmonise_contigs <- function(...) stop("not implemented: enforce chr-prefixed contig convention across all GRanges (open item #11)")

@@ -21,9 +21,9 @@ Controlled vocabulary (validated at input, not free text):
 - `hpv_status`: `positive` | `negative` | `unknown`
 - `hpv_genotype`: `HPV16` | `HPV18` | `other_highrisk` | `NA`
 
-Missing modalities are expected, not an error — leave `sample_id`/`fastq_1`/`fastq_2`
-blank for a patient/tissue/modality combination that wasn't generated, and note why
-in the `notes` column.
+Missing modalities are expected, not an error — leave `fastq_1`/`fastq_2` blank or
+`NA` for a patient/tissue/modality combination that wasn't generated (`sample_id` can
+stay filled in), and note why in the `notes` column.
 
 ## 2. Stage 1 — nf-core/rnaseq, sarek, smrnaseq
 
@@ -62,6 +62,7 @@ nextflow run . \
   --samplesheet <master samplesheet> \
   --rnaseq_results <stage1a_outdir> \
   --sarek_results <stage1b_outdir> \
+  --smrnaseq_results <stage1c_outdir> \
   --fasta <hg38 fasta> \
   --gtf <GENCODE v50 gtf> \
   --hpv_panel_fasta <hpv panel fasta> \

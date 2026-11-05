@@ -24,5 +24,16 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
   per-pipeline overrides (`conf/*.config`) and parameters (`params/*.yaml`).
   Values still to fill in are marked TODO; the all-in-one launcher is not
   written yet.
+- `--smrnaseq_results` param (Stage 1c nf-core/smrnaseq output dir).
+
+### Changed
+- smRNA-seq moved to Stage 1 (nf-core/smrnaseq): `SMRNASEQ` stub replaced by
+  `SMRNASEQ_ADAPTER`, which ingests the Stage 1c output instead of running its
+  own alignment/miRDeep2, matching `WGS_ADAPTER` / `RNASEQ_ADAPTER`.
+- `INPUT_CHECK` treats `NA` like blank in `sample_id`/`fastq_1`/`fastq_2`, and a
+  row is "missing" when `fastq_1` is blank/NA (its `sample_id` may stay filled
+  in), so the master sample sheet's documented missing rows pass validation.
+- `conf/slurm.config`: QoS `normal` -> `cpu-normal` (Alpine's QoS name);
+  `process_high` runs on `cpu-long`; submit rate matches Stage 1.
 
 Nothing tagged yet — no released version exists.

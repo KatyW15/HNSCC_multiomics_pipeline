@@ -5,7 +5,9 @@
 // Not yet implemented: each commented `include` below is a placeholder for a
 // subworkflow that still needs to be built. See pipeline_architecture.md §3
 // (implementation order: INPUT_CHECK -> RNASEQ_ADAPTER/WGS_ADAPTER ->
-// CIRCRNASEQ -> HPV_DETECTION -> SMRNASEQ -> INTEGRATION).
+// CIRCRNASEQ -> HPV_DETECTION -> SMRNASEQ_ADAPTER -> INTEGRATION).
+// The three *_ADAPTER subworkflows ingest Stage 1 nf-core output dirs
+// (sarek, rnaseq, smrnaseq — launched from stage1/).
 //
 // Built out so far: INPUT_CHECK (full), CIRCRNASEQ (structure + module/bin
 // scaffolds — the bespoke bin/circrna_*.R|py steps still `stop()`; runnable
@@ -17,7 +19,7 @@ include { INPUT_CHECK } from '../subworkflows/local/input_check'
 // include { WGS_ADAPTER     } from '../subworkflows/local/1_WGS'
 // include { RNASEQ_ADAPTER  } from '../subworkflows/local/2_totalRNAseq'
 include { CIRCRNASEQ         } from '../subworkflows/local/3_circRNAseq'
-// include { SMRNASEQ        } from '../subworkflows/local/4_smRNAseq'
+// include { SMRNASEQ_ADAPTER } from '../subworkflows/local/4_smRNAseq'
 // include { HPV_DETECTION   } from '../subworkflows/local/hpv_detection'
 // include { INTEGRATION     } from '../subworkflows/local/integration'
 // include { REPORTING       } from '../subworkflows/local/reporting'
@@ -43,8 +45,8 @@ workflow HNSCC_MULTIOMICS {
 
     // TODO:
     // HPV_DETECTION(RNASEQ_ADAPTER.out.unmapped, CIRCRNASEQ.out.unmapped, WGS_ADAPTER.out.unmapped)
-    // SMRNASEQ(INPUT_CHECK.out.smrnaseq)
-    // INTEGRATION(CIRCRNASEQ.out, RNASEQ_ADAPTER.out, SMRNASEQ.out, WGS_ADAPTER.out, HPV_DETECTION.out)
+    // SMRNASEQ_ADAPTER(INPUT_CHECK.out.smrnaseq, params.smrnaseq_results)
+    // INTEGRATION(CIRCRNASEQ.out, RNASEQ_ADAPTER.out, SMRNASEQ_ADAPTER.out, WGS_ADAPTER.out, HPV_DETECTION.out)
     //   emits: mae, recurrence_scores, cerna_network, genomic_correlation,
     //          hpv_axis, structure, biomarker_candidates, candidate_registry
     // REPORTING(INTEGRATION.out)

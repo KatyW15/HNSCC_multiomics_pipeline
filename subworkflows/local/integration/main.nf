@@ -36,7 +36,7 @@ workflow INTEGRATION {
     take:
     circrnaseq_out   // CIRCRNASEQ.out      — .calls, .de
     rnaseq_out       // RNASEQ_ADAPTER.out  — .gene_counts (host-gene DE table emit still TODO upstream, open item #17)
-    smrnaseq_out     // SMRNASEQ.out        — .de
+    smrnaseq_out     // SMRNASEQ_ADAPTER.out — .de
     wgs_out          // WGS_ADAPTER.out     — .somatic_variants, .cnv_consensus, .sv_calls, .coverage_qc
     hpv_out          // HPV_DETECTION.out   — .linear_quant, .circrna_calls, .integration_sites
 

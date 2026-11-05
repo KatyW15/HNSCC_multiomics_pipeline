@@ -46,6 +46,7 @@ nextflow run . \
   --samplesheet /path/to/master_samplesheet.csv \
   --rnaseq_results /path/to/stage1a_nf-core-rnaseq/results \
   --sarek_results /path/to/stage1b_nf-core-sarek/results \
+  --smrnaseq_results /path/to/stage1c_nf-core-smrnaseq/results \
   --outdir /path/to/results
 ```
 
